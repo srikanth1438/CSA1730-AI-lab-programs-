@@ -1,0 +1,23 @@
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F'],
+    'D': [],
+    'E': ['F'],
+    'F': []
+}
+
+def dfs_iterative_with_tree(start):
+    visited = set()
+    stack = [(start, 0)]  # Each item is a tuple: (node, depth)
+    
+    while stack:
+        node, depth = stack.pop()
+        if node not in visited:
+            print('  ' * depth + f'- {node}')  # Indentation based on depth
+            visited.add(node)
+            for neighbor in reversed(graph[node]):
+                stack.append((neighbor, depth + 1))
+
+print("DFS (Iterative Tree Structure):")
+dfs_iterative_with_tree('A')
