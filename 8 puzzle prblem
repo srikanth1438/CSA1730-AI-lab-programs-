@@ -1,0 +1,53 @@
+goal = (1,2,3,4,5,6,7,8,0)
+
+print("Enter 9 numbers (0-8) with space (0 = blank):")
+while True:
+    inp = input().split()
+    nums = [int(x) for x in inp if x.isdigit()]
+    if sorted(nums) == list(range(9)):
+        start = tuple(nums)
+        break
+    else:
+        print("Invalid input! Try again.")
+
+if start == goal:
+    print("Already at goal:")
+    for i in range(0, 9, 3): print(start[i:i+3])
+else:
+    queue = [(start, [start])]
+    visited = set()
+    visited.add(start)
+    found = False
+
+    while queue:
+        curr, path = queue[0]
+        queue = queue[1:]
+        zero = curr.index(0)
+
+        for move in [-3, 3, -1, 1]:
+            np = zero + move
+            if np < 0 or np >= 9: continue
+            if zero % 3 == 0 and move == -1: continue
+            if zero % 3 == 2 and move == 1: continue
+
+            new = list(curr)
+            new[zero], new[np] = new[np], new[zero]
+            new = tuple(new)
+
+            if new not in visited:
+                if new == goal:
+                    path.append(new)
+                    print("Solved in", len(path)-1, "moves!\n")
+                    for i, state in enumerate(path):
+                        print("Move", i)
+                        for j in range(0,9,3): print(state[j:j+3])
+                        print()
+                    found = True
+                    break
+                visited.add(new)
+                queue.append((new, path + [new]))
+
+        if found: break
+
+    if not found:
+        print("No solution found.")
